@@ -8,19 +8,6 @@
 {%- endcapture -%}
 
 
-{% capture now %}{{ "now" | date: "%M" }}{% endcapture %}
-{% capture last_order %}{{ customer.orders.last.created_at | date: "%M" }}{% endcapture %}
-{% capture time_to_last_o %}{{ now | minus: last_order }}{% endcapture %}
-{% assign time_to_last_o = time_to_last_o | plus: 0 %}
-
-{% if "now" | date: "%M" == customer.orders.last.created_at | date: "%M" %}
-  <h1>what to do ?</h1>
-{% endif %}
-
-<h1>{{ time_to_last_o }}</h1>
-<h1>{{ last_order }}</h1>
-
-
 <section data-section-id="{{ section.id }}" data-section-type="cart" data-section-settings='{{ section_settings }}'>
   {%- if cart.item_count == 0 -%}
 
@@ -119,49 +106,6 @@
           </footer>
         </form>
 
-    <!--       {%- if customer and customer.tags contains 'PRO' -%}
-
-          <div id="modal-got-address" class="Modal Modal--address" aria-hidden="true" role="dialog" data-scrollable>
-            <button class="Modal__Close Modal__Close--outside" data-action="close-modal">{%- render 'icon' with 'close' -%}</button>
-
-            <header class="Modal__Header">
-              <h3 class="Modal__Title Heading u-h2">VALIDEZ VOTRE ADDRESSE DE LIVRAISON</h3>
-            </header>
-
-            <div class="Modal__Content">
-              {%- if customer.addresses_count == 0 -%}
-                <div class="Segment">
-                  <p>{{ 'customer.account.no_addresses_content' | t }}</p>
-
-                  <div class="Segment__ButtonWrapper">
-                    <a href="{{ routes.account_addresses_url }}" class="Button Button--primary">{{ 'customer.account.manage_addresses' | t }}</a>
-                  </div>
-                </div>
-
-
-              {% else %}
-
-
-                <div class="Segment__Content">
-                  <div class="AccountAddress">
-                      <p id="addressName">{{ customer.addresses.first.name }}</p>
-                      <p id="company">{{ customer.addresses.first.company }}</p>
-                      <p id="street_address">{{ customer.addresses.first.address1 }}</p>
-                      <p id="city">{{ customer.addresses.first.city }}</p>
-                      <p id="zip">{{ customer.addresses.first.zip }}</p>
-                  </div>
-                  <div class="Segment__ButtonWrapper">
-                    <a href="{{ routes.account_addresses_url }}" class="Button Button--primary">CHANGER L'ADRESSE</a>
-                  </div>
-                  <div class="Segment__ButtonWrapper">
-                    <a id="ajax-call" href="" class="Button Button--primary">VALIDER</a>
-                  </div>
-                </div>
-              {%- endif -%}
-
-            </div>
-          </div>
-          {% endif %} -->
 
           {%- if customer and customer.tags contains 'PRO' -%}
 

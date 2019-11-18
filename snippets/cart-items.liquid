@@ -61,8 +61,8 @@
               <span class="CartItem__Price Price ProductItem__PriceList " data-money-convertible>{{ line_item.variant.metafields.global.ht_price | money_without_trailing_zeros }} H.T.</span>
             {% else %}
               {%- if line_item.original_price != line_item.final_price -%}
-                <span class="CartItem__Price Price ProductItem__PriceList " data-money-convertible>{{ line_item.final_price | money_without_trailing_zeros }}</span>
-                <span class="CartItem__OriginalPrice Price Price--compareAt" data-money-convertible>{{ line_item.original_price | money_without_trailing_zeros }}</span>
+                <span class="CartItem__Price Price ProductItem__PriceList " data-money-convertible>{{ line_item.variant.metafields.global.ht_price | money_without_trailing_zeros }}</span>
+                <span class="CartItem__OriginalPrice Price Price--compareAt" data-money-convertible>{{ line_item.variant.metafields.global.ht_price | money_without_trailing_zeros }}</span>
               {%- else -%}
                 <span class="CartItem__Price Price" data-money-convertible>{{ line_item.final_price | money_without_trailing_zeros }}</span>
               {%- endif -%}

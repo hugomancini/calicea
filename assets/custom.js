@@ -95,7 +95,7 @@ $("#call-drawer").click(function(e) {
       },
       success: function(data) {
         console.log(data)
-        setTimeout(function(){location.href="https://calicea.myshopify.com/cart/clear"} , 5500);
+        // setTimeout(function(){location.href="https://calicea.myshopify.com/cart/clear"} , 5500);
       },
       error : function(resultat, statut, erreur){
         console.log(statut, erreur)
@@ -141,23 +141,7 @@ $("#call-cart").click(function(e) {
       },
       success: function(data) {
         console.log(data)
-        $.ajax({
-            type: "POST",
-            url: "https://caliceapp.herokuapp.com/cart/clear",
-            crossDomain: true,
-            headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    'Access-Control-Allow-Methods':'POST',
-                    'Access-Control-Allow-Headers':'application/json'
-                  },
-            data:  {
-            },
-            success: function(data) {
-            },
-            error : function(resultat, statut, erreur){
-              console.log(statut, erreur)
-            dataType: 'json'
-            })
+        setTimeout(function(){location.href="https://calicea.myshopify.com/cart/clear"} , 5500);
       },
       error : function(resultat, statut, erreur){
         console.log(statut, erreur)
