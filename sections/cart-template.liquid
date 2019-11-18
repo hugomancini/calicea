@@ -1,0 +1,234 @@
+{%- capture section_settings -%}
+{
+  "type": {{ settings.cart_type | json }},
+  "itemCount": {{ cart.item_count }},
+  "drawer": false,
+  "hasShippingEstimator": {% if section.settings.show_shipping_estimator and cart.item_count > 0 %}true{% else %}false{% endif %}
+}
+{%- endcapture -%}
+
+<section data-section-id="{{ section.id }}" data-section-type="cart" data-section-settings='{{ section_settings }}'>
+  {%- if cart.item_count == 0 -%}
+    <div class="EmptyState">
+      <div class="Container">
+        <h1 class="EmptyState__Title Heading u-h5">{{ 'cart.general.empty' | t }}</h1>
+
+        {%- if settings.cart_show_free_shipping_threshold -%}
+          {%- assign threshold_in_cents = settings.cart_free_shipping_threshold | times: 100 -%}
+          {%- capture remaining_amount -%}<span>{{ cart.total_price | minus: threshold_in_cents | abs | money_without_trailing_zeros }}</span>{%- endcapture -%}
+
+          <p class="Text--subdued">{{- 'cart.general.free_shipping_remaining_html' | t: remaining_amount: remaining_amount -}}</p>
+        {%- endif -%}
+
+        <a href="{{ routes.all_products_collection_url }}" class="EmptyState__Action Button Button--primary">{{ 'cart.general.empty_button' | t }}</a>
+      </div>
+    </div>
+  {%- else -%}
+    <div class="Container">
+      <header class="PageHeader">
+        <div class="SectionHeader SectionHeader--center">
+          <h1 class="SectionHeader__Heading Heading u-h1">{{ 'cart.general.title' | t }}</h1>
+
+          {%- if settings.cart_show_free_shipping_threshold -%}
+            {%- assign threshold_in_cents = settings.cart_free_shipping_threshold | times: 100 -%}
+
+            <p class="SectionHeader__Description Text--subdued">
+              {%- if cart.total_price >= threshold_in_cents -%}
+                {{- 'cart.general.free_shipping' | t -}}
+              {%- else -%}
+                {%- capture remaining_amount -%}<span>{{ cart.total_price | minus: threshold_in_cents | abs | money_without_trailing_zeros }}</span>{%- endcapture -%}
+                {{- 'cart.general.free_shipping_remaining_html' | t: remaining_amount: remaining_amount -}}
+              {%- endif -%}
+            </p>
+          {%- endif -%}
+        </div>
+      </header>
+
+      <div class="PageContent">
+        {% assign total_pro = 0 %}
+
+        <form action="{{ routes.cart_url }}" method="POST" class="Cart Cart--expanded" novalidate>
+          <input type="hidden" name="attributes[collection_mobile_items_per_row]" value="">
+          <input type="hidden" name="attributes[collection_desktop_items_per_row]" value="">
+
+          {% render 'cart-items' %}
+
+          <footer class="Cart__Footer">
+            {%- if settings.cart_enable_notes -%}
+              <div class="Cart__NoteContainer">
+                <span class="Cart__NoteButton">{{ 'cart.general.add_note' | t }}</span>
+                <textarea class="Cart__Note Form__Textarea" name="note" id="cart-note" rows="4" placeholder="{{ 'cart.general.note_placeholder' | t }}">{{ cart.note }}</textarea>
+              </div>
+            {%- endif -%}
+
+            <div class="Cart__Recap">
+              {%- capture shipping_and_taxes_notice -%}{{ 'cart.general.shipping_and_taxes_notice' | t }}{%- endcapture -%}
+
+              {%- if cart.cart_level_discount_applications != blank -%}
+                {%- for discount_application in cart.cart_level_discount_applications -%}
+                  <p class="Cart__Discount Heading u-h6">{{ 'cart.general.discount' | t }} ({{ discount_application.title }}): -<span data-money-convertible>{{ discount_application.total_allocated_amount | money_without_trailing_zeros }}</span></p>
+                {%- endfor -%}
+              {%- endif -%}
+
+              {%- if customer and customer.tags contains 'PRO' -%}
+                {%- for line_item in cart.items -%}
+                  {% assign total_line_pro = line_item.quantity | times:line_item.variant.metafields.global.ht_price %}
+                  {% assign total_pro = total_pro | plus: total_line_pro %}
+                {% endfor %}
+
+
+                <p class="Cart__Total Heading u-h6">{{ 'cart.general.total' | t }}: <span data-money-convertible id="total_pro" data-proprice="{{ total_pro | divided_by: 100 }}">{{ total_pro | money_without_trailing_zeros }}</span><span>H.T.</span></p>
+              {% else %}
+                <p class="Cart__Total Heading u-h6">{{ 'cart.general.total' | t }}: <span  data-money-convertible>{{ cart.total_price | money_without_trailing_zeros }}</span></p>
+              {% endif %}
+
+              {%- if shipping_and_taxes_notice != blank -%}
+                <p class="Cart__Taxes Text--subdued">{{ shipping_and_taxes_notice }}</p>
+              {%- endif -%}
+
+              {%- if customer and customer.tags contains 'PRO' -%}
+                <button id="cart-confirmation" type="button" class="Button Button--primary" data-action="open-modal" aria-controls="modal-got-address">CONFIRMER VOTRE COMMANDE</button>
+              {%- else -%}
+                <button type="submit" name="checkout" class="Cart__Checkout Button Button--primary Button--full">{{ 'cart.general.checkout' | t }}</button>
+              {%- endif -%}
+            </div>
+          </footer>
+        </form>
+
+    <!--       {%- if customer and customer.tags contains 'PRO' -%}
+
+          <div id="modal-got-address" class="Modal Modal--address" aria-hidden="true" role="dialog" data-scrollable>
+            <button class="Modal__Close Modal__Close--outside" data-action="close-modal">{%- render 'icon' with 'close' -%}</button>
+
+            <header class="Modal__Header">
+              <h3 class="Modal__Title Heading u-h2">VALIDEZ VOTRE ADDRESSE DE LIVRAISON</h3>
+            </header>
+
+            <div class="Modal__Content">
+              {%- if customer.addresses_count == 0 -%}
+                <div class="Segment">
+                  <p>{{ 'customer.account.no_addresses_content' | t }}</p>
+
+                  <div class="Segment__ButtonWrapper">
+                    <a href="{{ routes.account_addresses_url }}" class="Button Button--primary">{{ 'customer.account.manage_addresses' | t }}</a>
+                  </div>
+                </div>
+
+
+              {% else %}
+
+
+                <div class="Segment__Content">
+                  <div class="AccountAddress">
+                      <p id="addressName">{{ customer.addresses.first.name }}</p>
+                      <p id="company">{{ customer.addresses.first.company }}</p>
+                      <p id="street_address">{{ customer.addresses.first.address1 }}</p>
+                      <p id="city">{{ customer.addresses.first.city }}</p>
+                      <p id="zip">{{ customer.addresses.first.zip }}</p>
+                  </div>
+                  <div class="Segment__ButtonWrapper">
+                    <a href="{{ routes.account_addresses_url }}" class="Button Button--primary">CHANGER L'ADRESSE</a>
+                  </div>
+                  <div class="Segment__ButtonWrapper">
+                    <a id="ajax-call" href="" class="Button Button--primary">VALIDER</a>
+                  </div>
+                </div>
+              {%- endif -%}
+
+            </div>
+          </div>
+          {% endif %} -->
+
+          {%- if customer and customer.tags contains 'PRO' -%}
+
+          <div id="modal-got-address" class="Modal Modal--address" aria-hidden="true" role="dialog" data-scrollable>
+            <button class="Modal__Close Modal__Close--outside" data-action="close-modal">{%- render 'icon' with 'close' -%}</button>
+
+            <header class="Form__Header">
+              <p class="Form__Legend">Merci de bien vouloir confirmer votre code CIP :</p>
+            </header>
+
+            <div class="Modal__Content">
+              {% for tag in customer.tags %}
+                {% if tag contains 'metaCIP : ' %}
+                {% capture cip %} <h1 id="cip"> {{ tag | replace: 'metaCIP : ', '' }} </h1> {% endcapture %}
+                <h1>{{ cip }}</h1>
+                {% endif %}
+              {% endfor %}
+              <button id="call-cart" type="submit" class="eurodep-call Form__Submit Button Button--primary Button--full">CONFIRMER</button>
+            </div>
+          </div>
+          {% endif %}
+
+        {%- if section.settings.show_shipping_estimator -%}
+          <div class="Section Section--spacingExtraLarge">
+            <div class="Panel">
+              <h2 class="Panel__Title Heading u-h2">{{ 'cart.shipping_estimator.title' | t }}</h2>
+
+              <div class="Panel__Content">
+                <div class="ShippingEstimator">
+                  <div class="ShippingEstimator__Form">
+                    <div class="ShippingEstimator__Country Form__Select Select Select--primary">
+                      {%- render 'icon' with 'select-arrow' -%}
+                      <select name="country" title="{{ 'cart.shipping_estimator.country' | t }}" data-default="{% if customer %}{{ customer.default_address.country }}{% elsif section.settings.shipping_estimator_default_country != '' %}{{ section.settings.shipping_estimator_default_country }}{% endif %}">{{ all_country_option_tags }}</select>
+                    </div>
+
+                    <div class="ShippingEstimator__Province Form__Select Select Select--primary" style="display: none">
+                      {%- render 'icon' with 'select-arrow' -%}
+                      <select name="province" title="{{ 'cart.shipping_estimator.province' | t }}"></select>
+                    </div>
+
+                    <input type="text" class="ShippingEstimator__Zip Form__Input" name="zip" placeholder="{{ 'cart.shipping_estimator.zip_code' | t }}">
+
+                    <button type="button" class="ShippingEstimator__Submit Button Button--primary">{{ 'cart.shipping_estimator.estimate' | t }}</button>
+                  </div>
+
+                  <div class="ShippingEstimator__Error Alert Alert--error" style="display: none"></div>
+                  <div class="ShippingEstimator__Results">
+                    <div class="ShippingEstimator__ResultsInner"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {% if customer %}
+    <div id="customer-info" style="display:none">
+      <div id="name">{{ customer.name }}</div>
+      <div id="id">{{ customer.id }}</div>
+      <div id="email">{{ customer.email }}</div>
+  {% endif %}
+
+</section>
+
+<script type="text/javascript">
+         jQuery(function() {
+             CartJS.init({{ cart | json }});
+         });
+</script>
+
+{% schema %}
+{
+  "name": "Cart page",
+  "class": "shopify-section--bordered",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_shipping_estimator",
+      "label": "Show shipping rates calculator",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "shipping_estimator_default_country",
+      "label": "Default country to use",
+      "info": "If your customer is logged-in, the country in his default shipping address will be selected.",
+      "default": "United States"
+    }
+  ]
+}
+{% endschema %}
