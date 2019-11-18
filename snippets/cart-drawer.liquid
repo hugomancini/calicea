@@ -109,23 +109,27 @@
       </div>
     {%- endunless -%}
   </form>
+
   {%- if customer and customer.tags contains 'PRO' -%}
 
-        <header class="Form__Header">
-              <p class="Form__Legend">Merci de bien vouloir confirmer votre code CIP :</p>
-            </header>
+  <div id="modal-got-address" class="Modal Modal--address" aria-hidden="true" role="dialog" data-scrollable>
+    <button class="Modal__Close Modal__Close--outside" data-action="close-modal">{%- render 'icon' with 'close' -%}</button>
 
-            <div class="Modal__Content">
-              {% for tag in customer.tags %}
-                {% if tag contains 'metaCIP : ' %}
-                {% capture cip %} <h1 id="cip"> {{ tag | replace: 'metaCIP : ', '' }} </h1> {% endcapture %}
-                <h1>{{ cip }}</h1>
-                {% endif %}
-              {% endfor %}
-              <button id="call-cart" type="submit" class="eurodep-call Form__Submit Button Button--primary Button--full">CONFIRMER</button>
-            </div>
-          </div>
+    <header class="Form__Header">
+      <p class="Form__Legend">Merci de bien vouloir confirmer votre code CIP :</p>
+    </header>
+
+    <div class="Modal__Content">
+      {% for tag in customer.tags %}
+        {% if tag contains 'metaCIP : ' %}
+        {% capture cip %} <h1 id="cip"> {{ tag | replace: 'metaCIP : ', '' }} </h1> {% endcapture %}
+        <h1>{{ cip }}</h1>
         {% endif %}
+      {% endfor %}
+      <button id="call-cart" type="submit" class="eurodep-call Form__Submit Button Button--primary Button--full">CONFIRMER</button>
+    </div>
+  </div>
+  {% endif %}
 </div>
 
 

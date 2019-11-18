@@ -84,6 +84,7 @@ $("#call-drawer").click(function(e) {
               'Access-Control-Allow-Headers':'application/json'
             },
       data:  {
+        cip: cip,
         customer_id: customer_id,
         pro_price: pro_price,
         total_price: total_price,
@@ -92,6 +93,8 @@ $("#call-drawer").click(function(e) {
       success: function(data) {
         console.log(data)
         $(".Modal__Content").html("<div><h1>Merci pour votre commande ! </h1><h3>Vous recevrez d'ici quelques minutes un e-mail de confirmation.</h3></div>")
+        setTimeout(function(){location.href="https://calicea.myshopify.com/cart/clear"} , 2500);
+        setTimeout(function(){location.href="https://calicea.myshopify.com/"} , 2800);
       },
       error : function(resultat, statut, erreur){
         console.log(statut, erreur)
@@ -127,6 +130,7 @@ $("#call-cart").click(function(e) {
               'Access-Control-Allow-Headers':'application/json'
             },
       data:  {
+        cip: cip,
         customer_id: customer_id,
         pro_price: pro_price,
         total_price: total_price,
@@ -135,6 +139,8 @@ $("#call-cart").click(function(e) {
       success: function(data) {
         console.log(data)
         $(".Modal__Content").html("<div><h1>Merci pour votre commande ! </h1><h3>Vous recevrez d'ici quelques minutes un e-mail de confirmation.</h3></div>")
+        setTimeout(function(){location.href="https://calicea.myshopify.com/cart/clear"} , 2500);
+        setTimeout(function(){location.href="https://calicea.myshopify.com/"} , 2800);
       },
       error : function(resultat, statut, erreur){
         console.log(statut, erreur)
