@@ -62,12 +62,14 @@ $("#call-drawer").click(function(e) {
   e.preventDefault();
   var cart = CartJS.cart
   var customer_id = $("#id").text()
+  var customer_mail = $("#mail").text()
   var pro_price = parseInt($("#total_pro").data('proprice'))
   var total_price = parseInt(cart["total_price"])
   var line_items = CartJS.cart.items
   var cip = parseInt($("#cip").text())
   console.log(cip)
   console.log(customer_id)
+  console.log(customer_mail)
   console.log(pro_price)
   console.log(total_price)
   console.log(line_items)
@@ -84,6 +86,7 @@ $("#call-drawer").click(function(e) {
               'Access-Control-Allow-Headers':'application/json'
             },
       data:  {
+        customer_mail: customer_mail,
         cip: cip,
         customer_id: customer_id,
         pro_price: pro_price,
@@ -92,9 +95,7 @@ $("#call-drawer").click(function(e) {
       },
       success: function(data) {
         console.log(data)
-        $(".Modal__Content").html("<div><h1>Merci pour votre commande ! </h1><h3>Vous recevrez d'ici quelques minutes un e-mail de confirmation.</h3></div>")
-        setTimeout(function(){location.href="https://calicea.myshopify.com/cart/clear"} , 2500);
-        setTimeout(function(){location.href="https://calicea.myshopify.com/"} , 2800);
+        setTimeout(function(){location.href="https://calicea.myshopify.com/cart/clear"} , 5500);
       },
       error : function(resultat, statut, erreur){
         console.log(statut, erreur)
@@ -107,6 +108,7 @@ $("#call-drawer").click(function(e) {
 $("#call-cart").click(function(e) {
   e.preventDefault();
   var cart = CartJS.cart
+  var customer_mail = $("#mail").text()
   var customer_id = $("#id").text()
   var pro_price = parseInt($("#total_pro").data('proprice'))
   var total_price = parseInt(cart["total_price"])
@@ -114,9 +116,9 @@ $("#call-cart").click(function(e) {
   var cip = parseInt($("#cip").text())
   console.log(cip)
   console.log(customer_id)
+  console.log(customer_mail)
   console.log(pro_price)
   console.log(total_price)
-  console.log(line_items)
   $(".Segment__Title").addClass("no-show")
   $(".Modal__Header").addClass("no-show")
   $(".Modal__Content").html("<img src='https://media.giphy.com/media/17mNCcKU1mJlrbXodo/giphy.gif'>")
@@ -130,6 +132,7 @@ $("#call-cart").click(function(e) {
               'Access-Control-Allow-Headers':'application/json'
             },
       data:  {
+        customer_mail: customer_mail,
         cip: cip,
         customer_id: customer_id,
         pro_price: pro_price,
@@ -138,9 +141,23 @@ $("#call-cart").click(function(e) {
       },
       success: function(data) {
         console.log(data)
-        $(".Modal__Content").html("<div><h1>Merci pour votre commande ! </h1><h3>Vous recevrez d'ici quelques minutes un e-mail de confirmation.</h3></div>")
-        setTimeout(function(){location.href="https://calicea.myshopify.com/cart/clear"} , 2500);
-        setTimeout(function(){location.href="https://calicea.myshopify.com/"} , 2800);
+        $.ajax({
+            type: "POST",
+            url: "https://caliceapp.herokuapp.com/cart/clear",
+            crossDomain: true,
+            headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    'Access-Control-Allow-Methods':'POST',
+                    'Access-Control-Allow-Headers':'application/json'
+                  },
+            data:  {
+            },
+            success: function(data) {
+            },
+            error : function(resultat, statut, erreur){
+              console.log(statut, erreur)
+            dataType: 'json'
+            })
       },
       error : function(resultat, statut, erreur){
         console.log(statut, erreur)

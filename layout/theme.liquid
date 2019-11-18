@@ -21,19 +21,7 @@
       <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
     {%- endif -%}
 
-<!--     {% if customer.tags contains 'PRO' %}
-      {% if customer.addresses_count == 0  %}
-        <script type="text/javascript">
-          var account = "https://calicea.myshopify.com/account"
-          var addresses = "https://calicea.myshopify.com/account/addresses"
-          console.log("no address")
-          if (window.location != account && window.location != addresses) {
-          alert("Pour continuer, merci de bien vouloir renseigner une addresse")
-          window.location.assign(account)
-          }
-        </script>
-      {% endif %}
-    {% endif %} -->
+
 
     {% render 'social-meta-tags' %}
 
@@ -150,17 +138,5 @@
       {% section 'footer' %}
     </div>
   </body>
-
-  <style type="text/css">
-    .no-show {
-      dislay:none;
-    }
-  </style>
-  <script type="text/javascript">
-             jQuery(function() {
-                 CartJS.init({{ cart | json }});
-                 console.log("initiated cartJS")
-             });
-  </script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/shopify-cartjs/0.4.3/cart.min.js"></script>
 </html>

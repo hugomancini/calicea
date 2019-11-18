@@ -7,22 +7,46 @@
 }
 {%- endcapture -%}
 
+
+{% capture now %}{{ "now" | date: "%M" }}{% endcapture %}
+{% capture last_order %}{{ customer.orders.last.created_at | date: "%M" }}{% endcapture %}
+{% capture time_to_last_o %}{{ now | minus: last_order }}{% endcapture %}
+{% assign time_to_last_o = time_to_last_o | plus: 0 %}
+
+{% if "now" | date: "%M" == customer.orders.last.created_at | date: "%M" %}
+  <h1>what to do ?</h1>
+{% endif %}
+
+<h1>{{ time_to_last_o }}</h1>
+<h1>{{ last_order }}</h1>
+
+
 <section data-section-id="{{ section.id }}" data-section-type="cart" data-section-settings='{{ section_settings }}'>
   {%- if cart.item_count == 0 -%}
-    <div class="EmptyState">
+
+    {% if time_to_last_o <= 1 %}
       <div class="Container">
-        <h1 class="EmptyState__Title Heading u-h5">{{ 'cart.general.empty' | t }}</h1>
-
-        {%- if settings.cart_show_free_shipping_threshold -%}
-          {%- assign threshold_in_cents = settings.cart_free_shipping_threshold | times: 100 -%}
-          {%- capture remaining_amount -%}<span>{{ cart.total_price | minus: threshold_in_cents | abs | money_without_trailing_zeros }}</span>{%- endcapture -%}
-
-          <p class="Text--subdued">{{- 'cart.general.free_shipping_remaining_html' | t: remaining_amount: remaining_amount -}}</p>
-        {%- endif -%}
-
-        <a href="{{ routes.all_products_collection_url }}" class="EmptyState__Action Button Button--primary">{{ 'cart.general.empty_button' | t }}</a>
+        <div class="tycart">
+          <h1 class="EmptyState__Title Heading u-h5">Nous vous remercions pour votre commande !</h1>
+          <h3>Vous recevrez d'ici quelques instants un email de confirmation</h3>
+        </div>
       </div>
-    </div>
+    {%- else -%}
+      <div class="EmptyState">
+        <div class="Container">
+          <h1 class="EmptyState__Title Heading u-h5">{{ 'cart.general.empty' | t }}</h1>
+
+          {%- if settings.cart_show_free_shipping_threshold -%}
+            {%- assign threshold_in_cents = settings.cart_free_shipping_threshold | times: 100 -%}
+            {%- capture remaining_amount -%}<span>{{ cart.total_price | minus: threshold_in_cents | abs | money_without_trailing_zeros }}</span>{%- endcapture -%}
+
+            <p class="Text--subdued">{{- 'cart.general.free_shipping_remaining_html' | t: remaining_amount: remaining_amount -}}</p>
+          {%- endif -%}
+
+          <a href="{{ routes.all_products_collection_url }}" class="EmptyState__Action Button Button--primary">{{ 'cart.general.empty_button' | t }}</a>
+        </div>
+      </div>
+    {% endif %}
   {%- else -%}
     <div class="Container">
       <header class="PageHeader">
@@ -200,7 +224,7 @@
     <div id="customer-info" style="display:none">
       <div id="name">{{ customer.name }}</div>
       <div id="id">{{ customer.id }}</div>
-      <div id="email">{{ customer.email }}</div>
+      <div id="mail">{{ customer.email }}</div>
   {% endif %}
 
 </section>

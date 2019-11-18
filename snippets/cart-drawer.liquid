@@ -130,6 +130,13 @@
     </div>
   </div>
   {% endif %}
+
+  {% if customer %}
+    <div id="customer-info" style="display:none">
+      <div id="name">{{ customer.name }}</div>
+      <div id="id">{{ customer.id }}</div>
+      <div id="mail">{{ customer.email }}</div>
+  {% endif %}
 </div>
 
 
