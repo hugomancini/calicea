@@ -75,6 +75,7 @@ $("#call-drawer").click(function(e) {
   console.log(line_items)
   $(".Segment__Title").addClass("no-show")
   $(".Modal__Header").addClass("no-show")
+  $(".Form__Header").addClass("no-show")
   $(".Modal__Content").html("<img src='https://media.giphy.com/media/17mNCcKU1mJlrbXodo/giphy.gif'>")
   $.ajax({
       type: "POST",
@@ -95,7 +96,7 @@ $("#call-drawer").click(function(e) {
       },
       success: function(data) {
         console.log(data)
-        // setTimeout(function(){location.href="https://calicea.myshopify.com/cart/clear"} , 5500);
+        $(".Modal__Content").html("<div><h1>MERCI POUR VOTRE COMMANDE !</h1><h3>Vous recevrez d'ici quelques instants un email de confirmation</h3></div>")
       },
       error : function(resultat, statut, erreur){
         console.log(statut, erreur)
@@ -121,6 +122,7 @@ $("#call-cart").click(function(e) {
   console.log(total_price)
   $(".Segment__Title").addClass("no-show")
   $(".Modal__Header").addClass("no-show")
+  $(".Form__Header").addClass("no-show")
   $(".Modal__Content").html("<img src='https://media.giphy.com/media/17mNCcKU1mJlrbXodo/giphy.gif'>")
   $.ajax({
       type: "POST",
@@ -141,7 +143,31 @@ $("#call-cart").click(function(e) {
       },
       success: function(data) {
         console.log(data)
-        setTimeout(function(){location.href="https://calicea.myshopify.com/cart/clear"} , 5500);
+        $(".Modal__Content").html("<div><h1>MERCI POUR VOTRE COMMANDE !</h1><h3>Vous recevrez d'ici quelques instants un email de confirmation</h3></div>")
+        $("#modal-got-address2").addClass("order-sent")
+        $(".order-sent").click(function(e) {
+          console.log("order sent ??.................")
+          $.ajax({
+            type: "POST",
+            url: "https://calicea.myshopify.com/cart/clear",
+            crossDomain: false,
+            headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    'Access-Control-Allow-Methods':'POST',
+                    'Access-Control-Allow-Headers':'application/json'
+                  },
+            data:  {
+            },
+            success: function(data) {
+              console.log(data)
+              window.location = "https://calicea.myshopify.com/"
+            },
+            error : function(resultat, statut, erreur){
+              console.log(statut, erreur)
+            },
+            dataType: 'json'
+          })
+        })
       },
       error : function(resultat, statut, erreur){
         console.log(statut, erreur)
@@ -153,8 +179,10 @@ $("#call-cart").click(function(e) {
 
 
 
-
-
+$(".order-sent").click(function(e) {
+  console.log(helllo)
+  console.log("order sent ??.................")
+})
 
 
 
