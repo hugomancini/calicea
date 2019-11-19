@@ -177,12 +177,31 @@ $("#call-cart").click(function(e) {
       })
   });
 
+if (document.referrer == "https://calicea.myshopify.com/pages/client-professionnel" ) {
+  console.log("client pro")
+  alert("Merci, votre demande d'inscription a bien été prise en compte. Si vous vous êtes inscrits en tant que professionnel, votre demande sera validée par nos équipes sous 24h.")
+}
 
 
-$(".order-sent").click(function(e) {
-  console.log(helllo)
-  console.log("order sent ??.................")
+if (document.referrer == "https://calicea.myshopify.com/challenge" ) {
+  console.log("client pro challenge")
+  alert("Merci, votre demande d'inscription a bien été prise en compte. Si vous êtes inscrits en tant que professionnel")
+}
+
+
+$("#pro_select").click(function(e) {
+  console.log("selected pro")
+  $(".register-pro ").removeClass("no-show")
+  $(".register-particulier ").addClass("no-show")
 })
+
+$("#particulier_select").click(function(e) {
+  console.log("selected pro")
+  $(".register-pro ").addClass("no-show")
+  $(".register-particulier ").removeClass("no-show")
+})
+
+
 
 
 
