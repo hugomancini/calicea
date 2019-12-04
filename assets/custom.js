@@ -188,10 +188,14 @@ $("#call-cart").click(function(e) {
   $("#pro-checkbox").click(function() {
     console.log("click")
     $(".pro-info").toggleClass("no-show")
+    $("#password").toggleClass("no-show")
+    $(".pro-input").prop('required',true);
+
   })
 
   $("#submit-register").click(function(e) {
-      console.log($("#pro-checkbox").checked == true)
+      console.log($("#pro-checkbox").checked)
+      console.log($("#pro-checkbox").active == true)
       e.preventDefault()
       var first_name = $("#last_name").val()
       var last_name = $("#last_name").val()
