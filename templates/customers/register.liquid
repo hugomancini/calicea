@@ -1,10 +1,7 @@
 <section data-section-id="reset-password" data-section-type="reset-password">
   <div class="Container">
-      <div id="pro-part" class="PageContent">
-        <button id="particulier_select" type="" class="Button Button--primary Button--full">PARTICULIERS</button>
-        <button id="pro_select" type="" class="Button Button--primary Button--full">PROFESSIONNEL</button>
-      </div>
-       <div class="register-pro no-show PageContent PageContent--fitScreen PageContent--extraNarrow">
+
+    <!--    <div class="register-pro no-show PageContent PageContent--fitScreen PageContent--extraNarrow">
       {%- form 'create_customer', name: 'create_pro_customer', class: 'Form Form--spacingTight', id: 'create_pro_customer' -%}
         <header class="Form__Header">
           <h1 class="Form__Title Heading u-h1">CREER COMPTE PROFESSIONNEL</h1>
@@ -55,20 +52,42 @@
             </div>
           </div>
         {%- endif -%}
+        <div class="pro-info">
+          <div class="Form__Item">
+            <input type="text" class="Form__Input" name="customer[note][company]" aria-label="Nom de l'entreprise" placeholder="Nom de l'entreprise">
+            <label class="Form__FloatingLabel">Raison sociale de l'entreprise*</label>
+          </div>
 
-        <div class="Form__Item">
-          <input type="text" class="Form__Input" name="customer[note][company]" aria-label="Nom de l'entreprise" placeholder="Nom de l'entreprise">
-          <label class="Form__FloatingLabel">Nom de l'entreprise</label>
-        </div>
+          <div class="Form__Item">
+            <input type="number" class="Form__Input" name="customer[note][siret]" aria-label="SIRET de l'entreprise" placeholder="SIRET de l'entreprise*" required>
+            <label class="Form__FloatingLabel">SIRET de l'entreprise*</label>
+          </div>
 
-        <div class="Form__Item">
-          <input type="number" class="Form__Input" name="customer[note][siret]" aria-label="SIRET de l'entreprise" placeholder="SIRET de l'entreprise*" required>
-          <label class="Form__FloatingLabel">SIRET de l'entreprise*</label>
-        </div>
+           <div class="Form__Item">
+            <input type="number" class="Form__Input" name="customer[note][cip]" aria-label="Code CIP" placeholder="Code CIP*" required>
+            <label class="Form__FloatingLabel">Code CIP*</label>
+          </div>
 
-         <div class="Form__Item">
-          <input type="number" class="Form__Input" name="customer[note][cip]" aria-label="Code CIP" placeholder="Code CIP*" required>
-          <label class="Form__FloatingLabel">Code CIP*</label>
+          <div class="Form__Item">
+            <input type="text" class="Form__Input" name="customer[note][company]" aria-label="Adresse de l'entreprise" placeholder="Adresse de l'entreprise" required>
+            <label class="Form__FloatingLabel">Adresse de l'entreprise</label>
+          </div>
+
+          <div class="Form__Item">
+            <input type="text" class="Form__Input" name="customer[note][company]" aria-label="Code postal de l'entreprise" placeholder="Code postal de l'entreprise" required>
+            <label class="Form__FloatingLabel">Code postal de l'entreprise*</label>
+          </div>
+
+          <div class="Form__Item">
+            <input type="text" class="Form__Input" name="customer[note][company]" aria-label="Ville" placeholder="Ville" required>
+            <label class="Form__FloatingLabel">Ville*</label>
+          </div>
+
+          <div class="Form__Item">
+            <input type="text" class="Form__Input" name="customer[note][company]" aria-label="Nom de l'entreprise" placeholder="Numéro de téléphone" required>
+            <label class="Form__FloatingLabel">Numéro de téléphone*</label>
+          </div>
+
         </div>
 
         <div class="Form__Item">
@@ -87,10 +106,10 @@
       {%- endform -%}
 
 
-    </div>
+    </div> -->
 
 
-        <div class="register-particulier PageContent PageContent--fitScreen PageContent--extraNarrow">
+        <div class="PageContent PageContent--fitScreen PageContent--extraNarrow">
           {%- form 'create_customer', name: 'create_customer', class: 'Form Form--spacingTight', id: 'create_customer' -%}
             <header class="Form__Header">
               <h1 class="Form__Title Heading u-h1">CREER COMPTE PARTICULIER</h1>
@@ -113,38 +132,83 @@
 
         {%- if request.locale.iso_code == 'ja' -%}
           <div class="Form__Item">
-            <input type="text" class="Form__Input" name="customer[last_name]" aria-label="{{ 'customer.register.last_name' | t }}" placeholder="{{ 'customer.register.last_name' | t }}">
+            <input id="last_name" type="text" class="Form__Input" name="customer[last_name]" aria-label="{{ 'customer.register.last_name' | t }}" placeholder="{{ 'customer.register.last_name' | t }}">
             <label class="Form__FloatingLabel">{{ 'customer.register.last_name' | t }}</label>
           </div>
 
           <div class="Form__Item">
-            <input type="text" class="Form__Input" name="customer[first_name]" aria-label="{{ 'customer.register.first_name' | t }}" placeholder="{{ 'customer.register.first_name' | t }}" autofocus>
+            <input id="first_name" type="text" class="Form__Input" name="customer[first_name]" aria-label="{{ 'customer.register.first_name' | t }}" placeholder="{{ 'customer.register.first_name' | t }}" autofocus>
             <label class="Form__FloatingLabel">{{ 'customer.register.first_name' | t }}</label>
           </div>
         {%- else -%}
           <div class="Form__Item">
-            <input type="text" class="Form__Input" name="customer[first_name]" aria-label="{{ 'customer.register.first_name' | t }}" placeholder="{{ 'customer.register.first_name' | t }}" autofocus>
+            <input id="first_name" type="text" class="Form__Input" name="customer[first_name]" aria-label="{{ 'customer.register.first_name' | t }}" placeholder="{{ 'customer.register.first_name' | t }}" autofocus>
             <label class="Form__FloatingLabel">{{ 'customer.register.first_name' | t }}</label>
           </div>
 
           <div class="Form__Item">
-            <input type="text" class="Form__Input" name="customer[last_name]" aria-label="{{ 'customer.register.last_name' | t }}" placeholder="{{ 'customer.register.last_name' | t }}">
+            <input id="last_name" type="text" class="Form__Input" name="customer[last_name]" aria-label="{{ 'customer.register.last_name' | t }}" placeholder="{{ 'customer.register.last_name' | t }}">
             <label class="Form__FloatingLabel">{{ 'customer.register.last_name' | t }}</label>
           </div>
         {%- endif -%}
 
+        <div class="pro-checkbox">
+          <label for="pro">Client professionnel ?</label>
+          <input type="checkbox" id="pro-checkbox" name="pro"
+                 >
+        </div>
+
+        <div class="pro-info no-show">
+          <div class="Form__Item">
+            <input id="raison_sociale" type="text" class="Form__Input" name="customer[note][company]" aria-label="Nom de l'entreprise" placeholder="Nom de l'entreprise">
+            <label class="Form__FloatingLabel">Raison sociale de l'entreprise*</label>
+          </div>
+
+          <div class="Form__Item">
+            <input id="siret" type="number" class="Form__Input" name="customer[note][siret]" aria-label="SIRET de l'entreprise" placeholder="SIRET de l'entreprise*" required>
+            <label class="Form__FloatingLabel">SIRET de l'entreprise*</label>
+          </div>
+
+           <div id="checkbox" class="Form__Item">
+            <label class="Form__FloatingLabel">Code CIP*</label>
+            <input id="cip-form" type="number" class="Form__Input" name="customer[note][cip]" aria-label="Code CIP" placeholder="Code CIP*" required>
+          </div>
+
+          <div class="Form__Item">
+            <input id="address1" type="text" class="Form__Input" name="customer[note][company]" aria-label="Adresse de l'entreprise" placeholder="Adresse de l'entreprise" required>
+            <label class="Form__FloatingLabel">Adresse de l'entreprise</label>
+          </div>
+
+          <div class="Form__Item">
+            <input id="zip" type="text" class="Form__Input" name="customer[note][company]" aria-label="Code postal de l'entreprise" placeholder="Code postal de l'entreprise" requires>
+            <label class="Form__FloatingLabel">Code postal de l'entreprise</label>
+          </div>
+
+          <div class="Form__Item">
+            <input id="city" type="text" class="Form__Input" name="customer[note][company]" aria-label="Ville" placeholder="Ville" requires>
+            <label class="Form__FloatingLabel">Ville</label>
+          </div>
+
+          <div class="Form__Item">
+            <input id="tel" type="text" class="Form__Input" name="customer[note][company]" aria-label="Nom de l'entreprise" placeholder="Numéro de téléphone" required>
+            <label class="Form__FloatingLabel">Numéro de téléphone</label>
+          </div>
+
+        </div>
+
         <div class="Form__Item">
-          <input type="email" class="Form__Input" name="customer[email]" aria-label="{{ 'customer.register.email' | t }}" placeholder="{{ 'customer.register.email' | t }}" required="required">
+          <input id="mail" type="email" class="Form__Input" name="customer[email]" aria-label="{{ 'customer.register.email' | t }}" placeholder="{{ 'customer.register.email' | t }}" required="required">
           <label class="Form__FloatingLabel">{{ 'customer.register.email' | t }}</label>
         </div>
 
+      <!--
         <div class="Form__Item">
           <input type="password" class="Form__Input" name="customer[password]" aria-label="{{ 'customer.register.password' | t }}" placeholder="{{ 'customer.register.password' | t }}" required="required">
           <label class="Form__FloatingLabel">{{ 'customer.register.password' | t }}</label>
-        </div>
+        </div> -->
 
-        <button type="submit" class="Form__Submit Button Button--primary Button--full">{{ 'customer.register.submit' | t }}</button>
+        <button id="submit-register" type="submit" class="Form__Submit Button Button--primary Button--full">{{ 'customer.register.submit' | t }}</button>
       {%- endform -%}
-    </div>
+
   </div>
 </section>

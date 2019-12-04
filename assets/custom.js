@@ -60,10 +60,11 @@
 
 $("#call-drawer").click(function(e) {
   e.preventDefault();
+  cartJS.getCart()
   var cart = CartJS.cart
   var customer_id = $("#id").text()
   var customer_mail = $("#mail").text()
-  var pro_price = parseInt($("#total_pro").data('proprice'))
+  var cip = parseInt($("#total_pro").data('proprice'))
   var total_price = parseInt(cart["total_price"])
   var line_items = CartJS.cart.items
   var cip = parseInt($("#cip").text())
@@ -71,7 +72,11 @@ $("#call-drawer").click(function(e) {
   console.log(customer_id)
   console.log(customer_mail)
   console.log(pro_price)
+  console.log("this is the cart")
+  console.log(cart)
+  console.log("this is the total price")
   console.log(total_price)
+  console.log("these are the line items")
   console.log(line_items)
   $(".Segment__Title").addClass("no-show")
   $(".Modal__Header").addClass("no-show")
@@ -109,6 +114,7 @@ $("#call-drawer").click(function(e) {
 $("#call-cart").click(function(e) {
   e.preventDefault();
   var cart = CartJS.cart
+  var note = $("#note").text()
   var customer_mail = $("#mail").text()
   var customer_id = $("#id").text()
   var pro_price = parseInt($("#total_pro").data('proprice'))
@@ -139,7 +145,8 @@ $("#call-cart").click(function(e) {
         customer_id: customer_id,
         pro_price: pro_price,
         total_price: total_price,
-        line_items: JSON.stringify(line_items)
+        line_items: JSON.stringify(line_items),
+        note: note
       },
       success: function(data) {
         console.log(data)
@@ -177,29 +184,67 @@ $("#call-cart").click(function(e) {
       })
   });
 
-if (document.referrer == "https://calicea.myshopify.com/pages/client-professionnel" ) {
-  console.log("client pro")
-  alert("Merci, votre demande d'inscription a bien été prise en compte. Si vous vous êtes inscrits en tant que professionnel, votre demande sera validée par nos équipes sous 24h.")
-}
+
+  $("#pro-checkbox").click(function() {
+    console.log("click")
+    $(".pro-info").toggleClass("no-show")
+  })
+
+  $("#submit-register").click(function(e) {
+      console.log($("#pro-checkbox").checked == true)
+      e.preventDefault()
+      var first_name = $("#last_name").val()
+      var last_name = $("#last_name").val()
+      var customer_mail = $("#mail").val()
+      var customer_tel = $("#tel").val()
+      var address1 = $("#address1").val()
+      var zip = $("#zip").val()
+      var city = $("#city").val()
+      var cip = $("#cip-form").val()
+      var siret = $("#siret").val()
+      var raison_sociale = $("#raison_sociale").val()
+      console.log(customer_mail)
+      console.log(customer_tel)
+      console.log(address1)
+      console.log(zip)
+      console.log(cip)
+      console.log(city)
+      console.log(siret)
+      console.log(raison_sociale)
+
+          $.ajax({
+            type: "POST",
+            url: "https://caliceapp.herokuapp.com/create_pro_customer",
+            crossDomain: false,
+            headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    'Access-Control-Allow-Methods':'POST',
+                    'Access-Control-Allow-Headers':'application/json'
+                  },
+            data:  {
+              first_name: first_name,
+              last_name: last_name,
+              customer_mail: customer_mail,
+              customer_tel: customer_tel,
+              address1: address1,
+              zip: zip,
+              city: city,
+              cip: cip,
+              siret: siret,
+              raison_sociale: raison_sociale
+            },
+            success: function(data) {
+              console.log(data)
+            },
+            error : function(resultat, statut, erreur){
+              console.log(statut, erreur)
+            },
+            dataType: 'json'
+          })
+        })
 
 
-if (document.referrer == "https://calicea.myshopify.com/challenge" ) {
-  console.log("client pro challenge")
-  alert("Merci, votre demande d'inscription a bien été prise en compte. Si vous êtes inscrits en tant que professionnel")
-}
 
-
-$("#pro_select").click(function(e) {
-  console.log("selected pro")
-  $(".register-pro ").removeClass("no-show")
-  $(".register-particulier ").addClass("no-show")
-})
-
-$("#particulier_select").click(function(e) {
-  console.log("selected pro")
-  $(".register-pro ").addClass("no-show")
-  $(".register-particulier ").removeClass("no-show")
-})
 
 
 
