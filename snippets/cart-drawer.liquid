@@ -58,9 +58,16 @@
             {%- endif -%}
           {%- endif -%}
 
-          {%- if shipping_and_taxes_notice != blank -%}
-            <p class="Cart__Taxes Text--subdued">{{ shipping_and_taxes_notice }}</p>
+          {%- if customer and customer.tags contains 'PRO' -%}
+
+          {%- else -%}
+            {%- if shipping_and_taxes_notice != blank -%}
+              <p class="Cart__Taxes Text--subdued">{{ shipping_and_taxes_notice }}</p>
+            {%- endif -%}
           {%- endif -%}
+
+
+
 
           {%- if cart.cart_level_discount_applications != blank -%}
             {%- for discount_application in cart.cart_level_discount_applications -%}
@@ -122,13 +129,9 @@
             </header>
 
             <div class="Modal__Content">
-              {% for tag in customer.tags %}
-                {% if tag contains 'metaCIP : ' %}
-                {% capture cip %} <h1 id="cip"> {{ tag | replace: 'metaCIP : ', '' }} </h1> {% endcapture %}
-                <h1>{{ cip }}</h1>
-                {% endif %}
-              {% endfor %}
+                <h1 id="cip"> {{ customer.metafields.global["cip"] }} </h1>
               <button id="call-cart" type="submit" class="eurodep-call Form__Submit Button Button--primary Button--full">CONFIRMER</button>
+              <button id="call-cart" type="submit" class="eurodep-call Form__Submit Button Button--secondary Button--full">MODIFIER</button>
             </div>
           </div>
           {% endif %}
@@ -139,6 +142,9 @@
       <div id="id">{{ customer.id }}</div>
       <div id="mail">{{ customer.email }}</div>
       <div id="note">{{ cart.note }}</div>
+      <div id="cip">{{ customer.metafields.global["cip"] }}</div id="cip">
+      <div id="siret">{{ customer.metafields.global["siret"] }}</div id="siret">
+      <div id="raison_sociale">{{ customer.metafields.global["raison_sociale"] }}</div id="raison_sociale">
     </div>
   {% endif %}
 

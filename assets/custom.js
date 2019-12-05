@@ -197,7 +197,7 @@ $("#call-cart").click(function(e) {
       console.log($("#pro-checkbox").checked)
       console.log($("#pro-checkbox").active == true)
       e.preventDefault()
-      var first_name = $("#last_name").val()
+      var first_name = $("#first_name").val()
       var last_name = $("#last_name").val()
       var customer_mail = $("#mail").val()
       var customer_tel = $("#tel").val()
