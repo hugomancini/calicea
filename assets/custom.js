@@ -45,7 +45,12 @@
     e.stopImmediatePropagation()
     console.log($("#pro_step"))
     console.log($("#pro_step").text())
-    $('.QuantitySelector__CurrentQuantity').val(parseInt($('.QuantitySelector__CurrentQuantity').val()) - parseInt($("#pro_step").text()))
+    if (parseInt($('.QuantitySelector__CurrentQuantity').val()) - parseInt($("#pro_step").text()) < 0) {
+      $('.QuantitySelector__CurrentQuantity').val(0)
+    }
+    else {
+      $('.QuantitySelector__CurrentQuantity').val(parseInt($('.QuantitySelector__CurrentQuantity').val()) - parseInt($("#pro_step").text()))
+    }
   })
 
   $("#pro_plus").click(function(e) {
@@ -115,6 +120,10 @@ $("#call-drawer").click(function(e) {
       })
   });
 
+$("#edit-pro").click(function() {
+  window.location = "https://calicea.myshopify.com/account"
+})
+
 $("#procheckout").click(function() {
     CartJS.getCart()
     console.log(CartJS.cart)
@@ -123,78 +132,84 @@ $("#procheckout").click(function() {
 
 $("#call-cart").click(function(e) {
   e.preventDefault();
-  CartJS.getCart()
-  var cart = CartJS.cart
-  var note = $("#note").text()
-  var customer_mail = $("#mail").text()
-  var customer_id = $("#id").text()
-  var pro_price = parseInt($("#total_pro").data('proprice'))
-  var total_price = parseInt(cart["total_price"])
-  var line_items = CartJS.cart.items
-  var cip = parseInt($("#cip").text())
-  console.log(cart)
-  console.log(cip)
-  console.log(customer_id)
-  console.log(customer_mail)
-  console.log(pro_price)
-  console.log(total_price)
-  $(".Segment__Title").addClass("no-show")
-  $(".Modal__Header").addClass("no-show")
-  $(".Form__Header").addClass("no-show")
-  $(".Modal__Content").html("<img src='https://media.giphy.com/media/17mNCcKU1mJlrbXodo/giphy.gif'>")
-  $.ajax({
-      type: "POST",
-      url: "https://caliceapp.herokuapp.com/checkout_pro",
-      crossDomain: true,
-      headers: {
-              "Access-Control-Allow-Origin": "*",
-              'Access-Control-Allow-Methods':'POST',
-              'Access-Control-Allow-Headers':'application/json'
-            },
-      data:  {
-        customer_mail: customer_mail,
-        cip: cip,
-        customer_id: customer_id,
-        pro_price: pro_price,
-        total_price: total_price,
-        line_items: JSON.stringify(line_items),
-        note: note
-      },
-      success: function(data) {
-        console.log(data)
-        $(".Modal__Content").html("<div><h1>MERCI POUR VOTRE COMMANDE !</h1><h3>Vous recevrez d'ici quelques instants un email de confirmation</h3></div>")
-        $("#modal-got-address2").addClass("order-sent")
-        $(".order-sent").click(function(e) {
-          console.log("order sent ??.................")
-          $.ajax({
-            type: "POST",
-            url: "https://calicea.myshopify.com/cart/clear",
-            crossDomain: false,
-            headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    'Access-Control-Allow-Methods':'POST',
-                    'Access-Control-Allow-Headers':'application/json'
-                  },
-            data:  {
-            },
-            success: function(data) {
-              console.log(data)
-              window.location = "https://calicea.myshopify.com/"
-            },
-            error : function(resultat, statut, erreur){
-              console.log(statut, erreur)
-            },
-            dataType: 'json'
+
+
+  CartJS.getCart(options = {
+    success: function(cart) {
+      console.log("_____________");
+      console.log(cart);
+
+      var note = $("#note").text()
+      var customer_mail = $("#mail").text()
+      var customer_id = $("#id").text()
+      var pro_price = parseInt($("#total_pro").data('proprice'))
+      var total_price = parseInt(cart["total_price"])
+      var line_items = cart.items
+      var cip = parseInt($("#cip").text())
+      $(".Segment__Title").addClass("no-show")
+      $(".Modal__Header").addClass("no-show")
+      $(".Form__Header").addClass("no-show")
+      $(".Modal__Content").html("<img src='https://media.giphy.com/media/17mNCcKU1mJlrbXodo/giphy.gif'>")
+
+    $.ajax({
+        type: "POST",
+        url: "https://caliceapp.herokuapp.com/checkout_pro",
+        crossDomain: true,
+        headers: {
+                "Access-Control-Allow-Origin": "*",
+                'Access-Control-Allow-Methods':'POST',
+                'Access-Control-Allow-Headers':'application/json'
+              },
+        data:  {
+          customer_mail: customer_mail,
+          cip: cip,
+          customer_id: customer_id,
+          pro_price: pro_price,
+          total_price: total_price,
+          line_items: JSON.stringify(line_items),
+          note: note
+        },
+        success: function(data) {
+          console.log(data)
+          $(".Modal__Content").html("<div><h1>MERCI POUR VOTRE COMMANDE !</h1><h3>Vous recevrez d'ici quelques instants un email de confirmation</h3></div>")
+          $("#modal-got-address2").addClass("order-sent")
+          $(".order-sent").click(function(e) {
+            console.log("order sent ??.................")
+            $.ajax({
+              type: "POST",
+              url: "https://calicea.myshopify.com/cart/clear",
+              crossDomain: false,
+              headers: {
+                      "Access-Control-Allow-Origin": "*",
+                      'Access-Control-Allow-Methods':'POST',
+                      'Access-Control-Allow-Headers':'application/json'
+                    },
+              data:  {
+              },
+              success: function(data) {
+                console.log(data)
+                window.location = "https://calicea.myshopify.com/"
+              },
+              error : function(resultat, statut, erreur){
+                console.log(statut, erreur)
+              },
+              dataType: 'json'
+            })
           })
+        },
+        error : function(resultat, statut, erreur){
+          console.log(statut, erreur)
+          $(".Modal__Content").html("<div><h1>Malheureusement, votre commande n'a pas pu aboutir.</h1><h3>Si le problème persiste, contactez-nous!.</h3></div>")
+        },
+        dataType: 'json'
         })
-      },
-      error : function(resultat, statut, erreur){
-        console.log(statut, erreur)
-        $(".Modal__Content").html("<div><h1>Malheureusement, votre commande n'a pas pu aboutir.</h1><h3>Si le problème persiste, contactez-nous!.</h3></div>")
-      },
-      dataType: 'json'
-      })
-  });
+      }
+    });
+  })
+
+
+
+
 
 
   $("#pro-checkbox").click(function() {
@@ -206,8 +221,16 @@ $("#call-cart").click(function(e) {
   })
 
   $("#submit-register").click(function(e) {
-      if ( (!$("#raison_sociale").val()) || (!$("#cip-form").val()) || (!$("#siret").val()) || (!$("#tel").val()) ) {
-        alert("Veuillez renseigner tous les champs marqués d'une *")
+      if (
+        (!$("#raison_sociale").val()) ||
+        (!$("#cip-form").val()) ||
+        (!$("#siret").val()) ||
+        (!$("#tel").val()) ||
+        (!$("#first_name").val()) ||
+        (!$("#last_name").val())
+        ) {
+        console.log("hi");
+        // alert("Veuillez renseigner tous les champs marqués d'une *")
       }
       else {
         console.log($("#pro-checkbox").checked)
