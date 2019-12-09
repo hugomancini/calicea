@@ -82,7 +82,7 @@
             {% assign total_line_pro = line_item.quantity | times:line_item.variant.metafields.global.ht_price %}
             {% assign total_pro = total_pro | plus: total_line_pro %}
           {% endfor %}
-          <button type="" name="procheckout" class="Cart__Checkout Button Button--primary Button--full" data-action="open-modal" aria-controls="modal-got-address2">
+          <button type="" id="procheckout" name="procheckout" class="Cart__Checkout Button Button--primary Button--full" data-action="open-modal" aria-controls="modal-got-address2">
           <span>{{ 'cart.general.checkout' | t }}</span>
           <span class="Button__SeparatorDot"></span>
           <span id="total_pro" data-money-convertible data-proprice="{{ total_pro | divided_by: 100 }}">{{ total_pro | divided_by: 100 }}</span><span>€ H.T.</span></span>
@@ -135,6 +135,9 @@
             </div>
           </div>
           {% endif %}
+
+
+
 
   {% if customer %}
     <div id="customer-info" style="display:none">

@@ -43,14 +43,18 @@
     e.preventDefault()
     e.stopPropagation()
     e.stopImmediatePropagation()
-    $('.QuantitySelector__CurrentQuantity').val(parseInt($('.QuantitySelector__CurrentQuantity').val()) - 6)
+    console.log($("#pro_step"))
+    console.log($("#pro_step").text())
+    $('.QuantitySelector__CurrentQuantity').val(parseInt($('.QuantitySelector__CurrentQuantity').val()) - parseInt($("#pro_step").text()))
   })
 
   $("#pro_plus").click(function(e) {
     e.preventDefault()
     e.stopPropagation()
     e.stopImmediatePropagation()
-    $('#pro_quantity').val(parseInt($('#pro_quantity').val()) + 6)
+    console.log($("#pro-step"))
+    console.log($("#pro-step").text())
+    $('#pro_quantity').val(parseInt($('#pro_quantity').val()) + parseInt($("#pro_step").text()))
   })
 
   $(".address-block").click(function(e) {
@@ -111,8 +115,15 @@ $("#call-drawer").click(function(e) {
       })
   });
 
+$("#procheckout").click(function() {
+    CartJS.getCart()
+    console.log(CartJS.cart)
+    console.log(CartJS.cart.total_price)
+  })
+
 $("#call-cart").click(function(e) {
   e.preventDefault();
+  CartJS.getCart()
   var cart = CartJS.cart
   var note = $("#note").text()
   var customer_mail = $("#mail").text()
@@ -121,6 +132,7 @@ $("#call-cart").click(function(e) {
   var total_price = parseInt(cart["total_price"])
   var line_items = CartJS.cart.items
   var cip = parseInt($("#cip").text())
+  console.log(cart)
   console.log(cip)
   console.log(customer_id)
   console.log(customer_mail)
@@ -194,58 +206,114 @@ $("#call-cart").click(function(e) {
   })
 
   $("#submit-register").click(function(e) {
-      console.log($("#pro-checkbox").checked)
-      console.log($("#pro-checkbox").active == true)
-      e.preventDefault()
-      var first_name = $("#first_name").val()
-      var last_name = $("#last_name").val()
-      var customer_mail = $("#mail").val()
-      var customer_tel = $("#tel").val()
-      var address1 = $("#address1").val()
-      var zip = $("#zip").val()
-      var city = $("#city").val()
-      var cip = $("#cip-form").val()
-      var siret = $("#siret").val()
-      var raison_sociale = $("#raison_sociale").val()
-      console.log(customer_mail)
-      console.log(customer_tel)
-      console.log(address1)
-      console.log(zip)
-      console.log(cip)
-      console.log(city)
-      console.log(siret)
-      console.log(raison_sociale)
+      if ( (!$("#raison_sociale").val()) || (!$("#cip-form").val()) || (!$("#siret").val()) || (!$("#tel").val()) ) {
+        alert("Veuillez renseigner tous les champs marqués d'une *")
+      }
+      else {
+        console.log($("#pro-checkbox").checked)
+        console.log($("#pro-checkbox").active == true)
+        e.preventDefault()
+        var first_name = $("#first_name").val()
+        var last_name = $("#last_name").val()
+        var customer_mail = $("#mail").val()
+        var customer_tel = $("#tel").val()
+        var address1 = $("#address1").val()
+        var zip = $("#zip").val()
+        var city = $("#city").val()
+        var cip = $("#cip-form").val()
+        var siret = $("#siret").val()
+        var raison_sociale = $("#raison_sociale").val()
+        console.log(customer_mail)
+        console.log(customer_tel)
+        console.log(address1)
+        console.log(zip)
+        console.log(cip)
+        console.log(city)
+        console.log(siret)
+        console.log(raison_sociale)
+        $("#create_customer").addClass("no-show")
+        $("#sign_up_complete").removeClass("no-show")
 
-          $.ajax({
-            type: "POST",
-            url: "https://caliceapp.herokuapp.com/create_pro_customer",
-            crossDomain: false,
-            headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    'Access-Control-Allow-Methods':'POST',
-                    'Access-Control-Allow-Headers':'application/json'
-                  },
-            data:  {
-              first_name: first_name,
-              last_name: last_name,
-              customer_mail: customer_mail,
-              customer_tel: customer_tel,
-              address1: address1,
-              zip: zip,
-              city: city,
-              cip: cip,
-              siret: siret,
-              raison_sociale: raison_sociale
-            },
-            success: function(data) {
-              console.log(data)
-            },
-            error : function(resultat, statut, erreur){
-              console.log(statut, erreur)
-            },
-            dataType: 'json'
-          })
+            $.ajax({
+              type: "POST",
+              url: "https://caliceapp.herokuapp.com/create_pro_customer",
+              crossDomain: false,
+              headers: {
+                      "Access-Control-Allow-Origin": "*",
+                      'Access-Control-Allow-Methods':'POST',
+                      'Access-Control-Allow-Headers':'application/json'
+                    },
+              data:  {
+                first_name: first_name,
+                last_name: last_name,
+                customer_mail: customer_mail,
+                customer_tel: customer_tel,
+                address1: address1,
+                zip: zip,
+                city: city,
+                cip: cip,
+                siret: siret,
+                raison_sociale: raison_sociale
+              },
+              success: function(data) {
+                console.log(data)
+                if (data["answer"]){
+                  window.location = "https://calicea.myshopify.com/pages/register-validation"
+                }
+                else {
+                  var errors = data["errors"]
+                  $("#create_customer").removeClass("no-show")
+                  $("#sign_up_complete").addClass("no-show")
+
+                  alert("Il y a eu une erreur, vérifiez vos informations et recommencez")
+                  console.log(errors)
+                }
+              },
+              error : function(resultat, statut, erreur){
+                console.log(statut, erreur)
+              },
+              dataType: 'json'
+            })
+          }
         })
+
+      $("#meta_update").click(function(e) {
+          e.preventDefault()
+          var cip = $("#cip-edit").val()
+          var siret = $("#siret-edit").val()
+          var raison_sociale = $("#raison_sociale-edit").val()
+          var customer_id = $("#customer_id").text()
+          console.log(customer_id)
+          console.log(cip)
+          console.log(siret)
+          console.log(raison_sociale)
+              $.ajax({
+                type: "POST",
+                url: "https://caliceapp.herokuapp.com/edit_pro",
+                crossDomain: false,
+                headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        'Access-Control-Allow-Methods':'POST',
+                        'Access-Control-Allow-Headers':'application/json'
+                      },
+                data:  {
+                  customer_id: customer_id,
+                  cip: cip,
+                  siret: siret,
+                  raison_sociale: raison_sociale
+                },
+                success: function(data) {
+                  console.log(data)
+                  console.log(data["errors"])
+                  window.location = "https://calicea.myshopify.com/account"
+                },
+                error : function(resultat, statut, erreur){
+                  console.log(statut, erreur)
+                },
+                dataType: 'json'
+              })
+            })
+
 
 
 

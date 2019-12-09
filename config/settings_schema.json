@@ -473,6 +473,14 @@
         "default": "drawer"
       },
       {
+        "type": "range",
+        "id": "pro_step",
+        "label": "Définissez le pas de commande pour les professionnels",
+        "min": 1,
+        "max": 20,
+        "default": 6
+      },
+      {
         "type": "checkbox",
         "id": "cart_enable_notes",
         "label": "Enable order notes",

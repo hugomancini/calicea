@@ -42,6 +42,7 @@
     "product_list_horizontal_spacing": "medium",
     "product_list_vertical_spacing": "small",
     "cart_type": "drawer",
+    "pro_step": 6,
     "cart_enable_notes": true,
     "cart_show_free_shipping_threshold": false,
     "cart_free_shipping_threshold": "90",

@@ -218,15 +218,15 @@ for size, we use it to display a size chart (if applicable)
 
       <div class="ProductForm__QuantitySelector">
         <div class="QuantitySelector QuantitySelector--large">
-          {%- assign quantity_minus_one = line_item.quantity | minus: 6 -%}
 
           {%- if customer and customer.tags contains 'PRO' -%}
+          <div class="no-show" id="pro_step">{{ settings.pro_step }}</div>
             <span id="pro_minus" class="QuantitySelector__Button Link Link--secondary" data-action="decrease-quantity">{% render 'icon' with 'minus' %}</span>
-            <input id="pro_quantity"type="text" class="QuantitySelector__CurrentQuantity" pattern="[0-9]*" name="quantity" value="6" readonly>
+            <input id="pro_quantity" type="text" class="QuantitySelector__CurrentQuantity" min="0" pattern="[0-9]*" name="quantity" value="{{ settings.pro_step }}" readonly>
             <span id="pro_plus" class="QuantitySelector__Button Link Link--secondary" data-action="increase-quantity">{% render 'icon' with 'plus' %}</span>
           {% else %}
             <span class="QuantitySelector__Button Link Link--secondary" data-action="decrease-quantity">{% render 'icon' with 'minus' %}</span>
-            <input type="text" class="QuantitySelector__CurrentQuantity" pattern="[0-9]*" name="quantity" value="1" >
+            <input type="text" class="QuantitySelector__CurrentQuantity" min="0" pattern="[0-9]*" name="quantity" value="1" >
             <span class="QuantitySelector__Button Link Link--secondary" data-action="increase-quantity">{% render 'icon' with 'plus' %}</span>
           {% endif %}
         </div>

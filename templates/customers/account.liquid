@@ -9,7 +9,6 @@
     <a href="{{ routes.account_logout_url }}" class="PageHeader__Back Heading Text--subdued Link Link--primary u-h7">{{ 'customer.account.logout' | t }}</a>
   </header>
 
-  <div>HELLLOOOOOOO PUTTING THE CUSTOMER METAFIELDS</div>
   <h1>{{ customer.metafielfds["tel"] }}</h1>
   <div class="PageLayout PageLayout--breakLap">
     {%- comment -%}
@@ -89,6 +88,52 @@
           </div>
         {%- endif -%}
       </div>
+       <div class="Segment" id="pro_info">
+        {%- if customer and customer.tags contains 'PRO' -%}
+          <h2 class="Segment__Title Heading u-h7">Vos informations professionnelles :</h2>
+
+          <div class="Segment__Content">
+            <p>CIP : {{ customer.metafields.global["cip"] }}</p>
+            <p>Siret : {{ customer.metafields.global["siret"] }}</p>
+            <p>Raison sociale : {{ customer.metafields.global["raison_sociale"] }}</p>
+
+           <div class="SectionHeader__ButtonWrapper">
+             <button id="pro_info_edit" type="button" class="Button Button--primary" data-action="open-modal" aria-controls="modal-edit-customer">Modifier vos informations</button>
+           </div>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div id="modal-edit-customer" class="Modal Modal--address" aria-hidden="true" role="dialog" data-scrollable>
+        <button class="Modal__Close Modal__Close--outside" data-action="close-modal">{%- render 'icon' with 'close' -%}</button>
+
+        <header class="Modal__Header">
+          <h3 class="Modal__Title Heading u-h2">Vos informations professionnelles</h3>
+          <p class="Modal__Description">{{ 'customer.addresses.form_subtitle' | t }}</p>
+        </header>
+
+        <div class="Modal__Content">
+              <div class="Form__Item">
+                <h4>CIP :</h4>
+                <input id="cip-edit" type="text" class="Form__Input" value="{{ customer.metafields.global["cip"] }}" name="{{ customer.metafields.global["cip"] }}" placeholder="{{ customer.metafields.global["cip"] }}" aria-label="{{ customer.metafields.global["cip"] }}">
+              </div>
+
+              <div class="Form__Item">
+                <h4>SIRET :</h4>
+                <input id="siret-edit" type="text" class="Form__Input" value="{{ customer.metafields.global["siret"] }}" name="{{ customer.metafields.global["siret"] }}" placeholder="{{ customer.metafields.global["siret"] }}" aria-label="" autofocus>
+              </div>
+
+
+              <div class="Form__Item">
+                <h4>Raison sociale :</h4>
+                <input id="raison_sociale-edit" type="text" class="Form__Input" name="{{ customer.metafields.global["raison_sociale"] }}" placeholder="{{ customer.metafields.global["raison_sociale"] }}" value = "" aria-label="{{ customer.metafields.global["raison_sociale"] }}">
+              </div>
+
+              <div id="customer_id" class="no-show">{{ customer.id }}</div>
+
+            <button id="meta_update" class="Form__Submit Button Button--primary Button--full">Mettre à jour vos information</button>
+        </div>
+
     </div>
   </div>
 </div>

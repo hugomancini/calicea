@@ -101,7 +101,7 @@
                   {%- render 'icon' with 'minus' -%}
                 </a>
 
-                <input type="text" name="updates[]" id="updates_{{ line_item.key }}" class="QuantitySelector__CurrentQuantity" pattern="[0-9]*" data-line-id="{{ line_item.key }}" value="{{ line_item.quantity }}" readonly>
+                <input type="text" min="0" name="updates[]" id="updates_{{ line_item.key }}" class="QuantitySelector__CurrentQuantity" pattern="[0-9]*" data-line-id="{{ line_item.key }}" value="{{ line_item.quantity }}" readonly>
 
                 {%- if customer and customer.tags contains 'PRO' -%}
                   {% assign quantity_modulo2 = line_item.quantity | modulo: 6 %}
